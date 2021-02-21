@@ -1,10 +1,15 @@
 import pydicom as dicom
 import xlsxwriter
 import os
+import shutil
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QFileDialog,QStatusBar
+from PyQt5.QtWidgets import QFileDialog,QMessageBox
 
 class Ui_MainWindow(object):
+
+    inputDirectory = None;
+    outputDirectory = None;
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(401, 178)
@@ -42,6 +47,7 @@ class Ui_MainWindow(object):
         self.button3 = QtWidgets.QPushButton(self.centralwidget)
         self.button3.setGeometry(QtCore.QRect(20, 140, 75, 23))
         self.button3.setObjectName("button3")
+        self.button3.clicked.connect(self.renameFile)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -56,14 +62,41 @@ class Ui_MainWindow(object):
         self.button2.setText(_translate("MainWindow", "..."))
         self.button3.setText(_translate("MainWindow", "Rename"))
 
+    def show_popup(self, message):
+        msg = QMessageBox()
+        msg.setWindowTitle("Alert")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("./dcm-icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        msg.setWindowIcon(icon)
+        msg.setText(message)
+        x = msg.exec_()
+
     def inputFolder(self):
-        folder = QFileDialog.getExistingDirectory(None, "Select Directory")
-        self.label1.setText(folder)
+        self.inputDirectory = QFileDialog.getExistingDirectory(None, "Select Directory")
+        if self.inputDirectory:
+            self.label1.setText(self.inputDirectory)
+        else:
+            self.show_popup('Folder .dcm belum dipilih')
+            pass
 
     def outputFolder(self):
-        folder = QFileDialog.getExistingDirectory(None, "Select Directory")
-        self.label2.setText(folder)
+        self.outputDirectory = QFileDialog.getExistingDirectory(None, "Select Directory")
+        if self.outputDirectory:
+            self.label2.setText(self.outputDirectory)
+        else:
+            self.show_popup('Folder output belum dipilih')
+            pass
 
+    def renameFile(self):
+        if self.outputDirectory and self.inputDirectory:
+            files = os.listdir(self.inputDirectory)
+            for file in files:
+                ds = dicom.read_file(self.inputDirectory + '/' + file, force=True)
+                print(os.path.basename(os.path.normpath(self.outputDirectory)))
+                shutil.copy(self.inputDirectory + '/' + file,self.outputDirectory + '/' + )
+        else:
+            self.show_popup('Ada folder belum dipilih')
+            pass
 
 if __name__ == "__main__":
     import sys
