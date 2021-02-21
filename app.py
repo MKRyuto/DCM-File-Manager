@@ -76,6 +76,7 @@ class Ui_MainWindow(object):
         if self.inputDirectory:
             self.label1.setText(self.inputDirectory)
         else:
+            self.label1.setText(None)
             self.show_popup('Folder .dcm belum dipilih')
             pass
 
@@ -84,6 +85,7 @@ class Ui_MainWindow(object):
         if self.outputDirectory:
             self.label2.setText(self.outputDirectory)
         else:
+            self.label2.setText(None)
             self.show_popup('Folder output belum dipilih')
             pass
 
@@ -91,9 +93,12 @@ class Ui_MainWindow(object):
         if self.outputDirectory and self.inputDirectory:
             files = os.listdir(self.inputDirectory)
             for file in files:
-                ds = dicom.read_file(self.inputDirectory + '/' + file, force=True)
-                print(os.path.basename(os.path.normpath(self.outputDirectory)))
-                shutil.copy(self.inputDirectory + '/' + file,self.outputDirectory + '/' + )
+                if file.endswith(".dcm"):
+                    ds = dicom.read_file(self.inputDirectory + '/' + file, force=True)
+                    index = (os.path.basename(os.path.normpath(self.outputDirectory)), ds.DetectorID, ds.AnodeTargetMaterial, ds.FilterMaterial, str(ds.KVP), str(ds.Exposure), ds.DateOfLastDetectorCalibration, ds.Grid)
+                    newFileName = "_".join(index)
+                    shutil.copy(self.inputDirectory + '/' + file,self.outputDirectory + '/' + newFileName + '.dcm')
+            self.show_popup('Proses selesai')
         else:
             self.show_popup('Ada folder belum dipilih')
             pass
