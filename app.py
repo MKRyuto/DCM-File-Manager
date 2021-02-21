@@ -77,7 +77,7 @@ class Ui_MainWindow(object):
             self.label1.setText(self.inputDirectory)
         else:
             self.label1.setText(None)
-            self.show_popup('Folder .dcm belum dipilih')
+            self.show_popup('The .dmc file folder is not selected')
             pass
 
     def outputFolder(self):
@@ -86,7 +86,7 @@ class Ui_MainWindow(object):
             self.label2.setText(self.outputDirectory)
         else:
             self.label2.setText(None)
-            self.show_popup('Folder output belum dipilih')
+            self.show_popup('The output folder is not selected')
             pass
 
     def renameFile(self):
@@ -98,9 +98,9 @@ class Ui_MainWindow(object):
                     index = (os.path.basename(os.path.normpath(self.outputDirectory)), ds.DetectorID, ds.AnodeTargetMaterial, ds.FilterMaterial, str(ds.KVP), str(ds.Exposure), ds.DateOfLastDetectorCalibration, ds.Grid)
                     newFileName = "_".join(index)
                     shutil.copy(self.inputDirectory + '/' + file,self.outputDirectory + '/' + newFileName + '.dcm')
-            self.show_popup('Proses selesai')
+            self.show_popup('Process complete')
         else:
-            self.show_popup('Ada folder belum dipilih')
+            self.show_popup('No folder has not been selected')
             pass
 
 if __name__ == "__main__":
