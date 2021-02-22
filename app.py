@@ -208,100 +208,26 @@ class Ui_exportData(object):
         if self.inputDirectory:
             self.outputDirectory = QFileDialog.getSaveFileName(None, "Save file", "", "Excel (*.xlsx)")
             files = os.listdir(self.inputDirectory)
-            dfAll = pd.DataFrame(columns=['Implementation Version Name', 'Image Type', 'Acquisition Date', 'Acquisition Time', 'Modality', 'Presentation Intent Type', 'Manufacturer', 'Institution Name', 'Manufacturer Model Name', 'Patient Name', 'kVp', 'Device Serial Number', 'Software Versions(s)', 'Distance Source to Detector', 'Distance Source to Patient', 'Field of View Shape', 'Field of View Dimensions(s)', 'Exposure Time', 'X-ray Tube Current', 'Exposure', 'Exposure in uAs', 'Rectification Type', 'Imager Pixel Spacing', 'Grid', 'Focal Spot(s)', 'Anode Target Material', 'Body Part Thickness', 'Compression Force', 'Detector Type', 'Detector Configuration', 'Detector Description', 'Detector Mode', 'Detector ID', 'Date of Last Detector Calibration', 'Time of Last Detector Calibration', 'Exposures on Detector Since Last Calibration', 'Exposures on Detector Since Manufactured', 'Detector Time Since Last Exposure', 'Detector Active Time', 'Detector Activation Offset From Exposure', 'Detector Binning', 'Detector Element Physical Size', 'Detector Element Spacing', 'Detector Active Shape', 'Detector Active Dimension(s)', 'Filter Material LT', 'Filter Thickness Minimum', 'Filter Thickness Maximum', 'Exposure Control Mode', 'Exposure Control Mode Description', 'Photometric Interpretation', 'Rows', 'Columns', 'Bits Allocated', 'Bits Stored', 'High Bit', 'Pixel Intensity Relationship', 'Distance Source to Entrance', 'Organ Dose', 'Entrance Dose in mGy'])
+            dfAll = pd.DataFrame(columns=['Acquisition Date', 'kVp', 'Exposure', 'Grid', 'Anode Target Material', 'Detector ID', 'Date of Last Detector Calibration', 'Filter Material LT'])
             for file in files:
                 if file.endswith(".dcm"):
                     ds = dicom.read_file(self.inputDirectory + '/' + file, force=True)
                     ImageType = ' | '.join(filter(None, ds.ImageType))
                     SoftwareVersions = ' | '.join(filter(None, ds.SoftwareVersions))
-                    try : 
-                        ds.RectificationType
-                        ds.DetectorMode
-                        ds.TimeOfLastDetectorCalibration
-                        ds.ExposuresOnDetectorSinceLastCalibration
-                        ds.ExposuresOnDetectorSinceManufactured
-                        ds.DetectorTimeSinceLastExposure
-                        ds.DetectorActiveTime
-                        ds.DetectorActivationOffsetFromExposure
-                        ds.FilterThicknessMinimum
-                        ds.FilterThicknessMaximum
-                    except:
-                        ds.RectificationType = 'Null'
-                        ds.DetectorMode = 'Null'
-                        ds.TimeOfLastDetectorCalibration = 'Null'
-                        ds.ExposuresOnDetectorSinceLastCalibration = 0
-                        ds.ExposuresOnDetectorSinceManufactured = 0
-                        ds.DetectorTimeSinceLastExposure = 0
-                        ds.DetectorActiveTime = 0
-                        ds.DetectorActivationOffsetFromExposure = 0
-                        ds.FilterThicknessMinimum = 0
-                        ds.FilterThicknessMaximum = 0
-                    dataDicom = {
-                                'Implementation Version Name' : [ds.file_meta.ImplementationVersionName], 
-                                'Image Type' : [ImageType], 
+                    dataDicom = { 
                                 'Acquisition Date' : [ds.AcquisitionDate], 
-                                'Acquisition Time' : [ds.AcquisitionTime], 
-                                'Modality' : [ds.Modality], 
-                                'Presentation Intent Type' : [ds.PresentationIntentType], 
-                                'Manufacturer' : [ds.Manufacturer], 
-                                'Institution Name' : [ds.InstitutionName], 
-                                'Manufacturer Model Name' : [ds.ManufacturerModelName], 
-                                'Patient Name' : [ds.PatientName], 
-                                'kVp' : [ds.KVP], 
-                                'Device Serial Number' : [ds.DeviceSerialNumber], 
-                                'Software Versions(s)' : [SoftwareVersions], 
-                                'Distance Source to Detector' : [ds.DistanceSourceToDetector], 
-                                'Distance Source to Patient' : [ds.DistanceSourceToPatient], 
-                                'Field of View Shape' : [ds.FieldOfViewShape], 
-                                'Field of View Dimensions(s)' : [str(ds.FieldOfViewDimensions)], 
-                                'Exposure Time' : [ds.ExposureTime], 
-                                'X-ray Tube Current' : [ds.XRayTubeCurrent], 
-                                'Exposure' : [ds.Exposure], 
-                                'Exposure in uAs' : [ds.ExposureInuAs], 
-                                'Rectification Type' : [ds.RectificationType], 
-                                'Imager Pixel Spacing' : [str(ds.ImagerPixelSpacing)], 
+                                'kVp' : [ds.KVP],
+                                'Exposure' : [ds.Exposure],  
                                 'Grid' : [ds.Grid], 
-                                'Focal Spot(s)' : [ds.FocalSpots], 
                                 'Anode Target Material' : [ds.AnodeTargetMaterial], 
-                                'Body Part Thickness' : [ds.BodyPartThickness], 
-                                'Compression Force' : [ds.CompressionForce], 
-                                'Detector Type' : [ds.DetectorType], 
-                                'Detector Configuration' : [ds.DetectorConfiguration], 
-                                'Detector Description' : [ds.DetectorDescription], 
-                                'Detector Mode' : [ds.DetectorMode], 
                                 'Detector ID' : [ds.DetectorID], 
-                                'Date of Last Detector Calibration' : [ds.DateOfLastDetectorCalibration], 
-                                'Time of Last Detector Calibration' : [ds.TimeOfLastDetectorCalibration], 
-                                'Exposures on Detector Since Last Calibration' : [ds.ExposuresOnDetectorSinceLastCalibration], 
-                                'Exposures on Detector Since Manufactured' : [ds.ExposuresOnDetectorSinceManufactured], 
-                                'Detector Time Since Last Exposure' : [ds.DetectorTimeSinceLastExposure], 
-                                'Detector Active Time' : [ds.DetectorActiveTime], 
-                                'Detector Activation Offset From Exposure' : [ds.DetectorActivationOffsetFromExposure], 
-                                'Detector Binning' : [str(ds.DetectorBinning)], 
-                                'Detector Element Physical Size' : [str(ds.DetectorElementPhysicalSize)], 
-                                'Detector Element Spacing' : [str(ds.DetectorElementSpacing)], 
-                                'Detector Active Shape' : [ds.DetectorActiveShape], 
-                                'Detector Active Dimension(s)' : [str(ds.DetectorActiveDimensions)], 
-                                'Filter Material LT' : [ds.FilterMaterial], 
-                                'Filter Thickness Minimum' : [ds.FilterThicknessMinimum], 
-                                'Filter Thickness Maximum' : [ds.FilterThicknessMaximum], 
-                                'Exposure Control Mode' : [ds.ExposureControlMode], 
-                                'Exposure Control Mode Description' : [ds.ExposureControlModeDescription], 
-                                'Photometric Interpretation' : [ds.PhotometricInterpretation], 
-                                'Rows' : [ds.Rows], 
-                                'Columns' : [ds.Columns], 
-                                'Bits Allocated' : [ds.BitsAllocated], 
-                                'Bits Stored' : [ds.BitsStored], 
-                                'High Bit' : [ds.HighBit], 
-                                'Pixel Intensity Relationship' : [ds.PixelIntensityRelationship], 
-                                'Distance Source to Entrance' : [ds.DistanceSourceToEntrance], 
-                                'Organ Dose' : [ds.OrganDose], 
-                                'Entrance Dose in mGy' : [ds.EntranceDoseInmGy]
+                                'Date of Last Detector Calibration' : [ds.DateOfLastDetectorCalibration],  
+                                'Filter Material LT' : [ds.FilterMaterial]
                                 }
                     df = pd.DataFrame(dataDicom)
                     dfAll = dfAll.append(df, ignore_index=True)
 
-            dfAll.to_excel (str(self.outputDirectory[0]), index = False, header=True)
+            dfAll.to_excel (self.outputDirectory[0], index = False, header=True)
             self.show_popup('Process complete')
         else:
             self.show_popup('No folder has not been selected')
