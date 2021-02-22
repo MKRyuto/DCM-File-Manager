@@ -1,4 +1,4 @@
 pydicom
-XlsxWriter
 pytest-shutil
 PyQt5
+pandas

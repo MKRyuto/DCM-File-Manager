@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>401</width>
-    <height>178</height>
+    <height>177</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DCM File Manager</string>
+   <string>Rename File</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -115,6 +115,19 @@ padding-left: 5px;</string>
     </property>
     <property name="text">
      <string>Rename</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button4">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>140</y>
+      <width>51</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Back</string>
     </property>
    </widget>
   </widget>

@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(401, 178)
+        MainWindow.resize(401, 177)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("C:/Users/muham/OneDrive/Pictures/dcm-icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -47,6 +47,9 @@ class Ui_MainWindow(object):
         self.button3 = QtWidgets.QPushButton(self.centralwidget)
         self.button3.setGeometry(QtCore.QRect(20, 140, 75, 23))
         self.button3.setObjectName("button3")
+        self.button4 = QtWidgets.QPushButton(self.centralwidget)
+        self.button4.setGeometry(QtCore.QRect(330, 140, 51, 23))
+        self.button4.setObjectName("button4")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -60,12 +63,4 @@ class Ui_MainWindow(object):
         self.groupBox_2.setTitle(_translate("MainWindow", "new folder"))
         self.button2.setText(_translate("MainWindow", "..."))
         self.button3.setText(_translate("MainWindow", "Rename"))
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+        self.button4.setText(_translate("MainWindow", "Back"))
