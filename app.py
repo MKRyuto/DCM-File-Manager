@@ -213,16 +213,72 @@ class Ui_exportData(object):
                 if file.endswith(".dcm"):
                     ds = dicom.read_file(self.inputDirectory + '/' + file, force=True)
                     ImageType = ' | '.join(filter(None, ds.ImageType))
-                    SoftwareVersions = ' | '.join(filter(None, ds.SoftwareVersions))
-                    dataDicom = { 
+                    SoftwareVersions = ''.join(filter(None, ds.SoftwareVersions))
+                    attribut = ['AccessionNumber', 'AcquisitionContextSequence', 'AcquisitionDate', 'AcquisitionDeviceProcessingCode', 'AcquisitionDeviceProcessingDescription', 'AcquisitionNumber', 'AcquisitionTime', 'AnatomicRegionSequence', 'AnodeTargetMaterial', 'BitsAllocated', 'BitsStored', 'BodyPartExamined', 'BodyPartThickness', 'BreastImplantPresent', 'BurnedInAnnotation', 'CalibrationImage', 'Columns', 'CompressionForce', 'ContentDate', 'ContentTime', 'ContrastBolusAgent', 'DateOfLastDetectorCalibration', 'DerivationDescription', 'DetectorActivationOffsetFromExposure', 'DetectorActiveDimensions', 'DetectorActiveOrigin', 'DetectorActiveShape', 'DetectorActiveTime', 'DetectorBinning', 'DetectorConditionsNominalFlag', 'DetectorConfiguration', 'DetectorDescription', 'DetectorElementPhysicalSize', 'DetectorElementSpacing', 'DetectorID', 'DetectorMode', 'DetectorPrimaryAngle', 'DetectorSecondaryAngle', 'DetectorTemperature', 'DetectorTimeSinceLastExposure', 'DetectorType', 'DeviceSerialNumber', 'DistanceSourceToDetector', 'DistanceSourceToEntrance', 'DistanceSourceToPatient', 'EntranceDose', 'EntranceDoseInmGy', 'EstimatedRadiographicMagnificationFactor', 'Exposure', 'ExposureControlMode', 'ExposureControlModeDescription', 'ExposureInuAs', 'ExposureStatus', 'ExposureTime', 'ExposureTimeInuS', 'ExposuresOnDetectorSinceLastCalibration', 'ExposuresOnDetectorSinceManufactured', 'FieldOfViewDimensions', 'FieldOfViewHorizontalFlip', 'FieldOfViewOrigin', 'FieldOfViewRotation', 'FieldOfViewShape', 'FilterMaterial', 'FilterThicknessMaximum', 'FilterThicknessMinimum', 'FocalSpots', 'Grid', 'HighBit', 'ImageComments', 'ImageLaterality', 'ImageType', 'ImagerPixelSpacing', 'InstanceNumber', 'InstitutionAddress', 'InstitutionName', 'InstitutionalDepartmentName', 'KVP', 'LossyImageCompression', 'Manufacturer', 'ManufacturerModelName', 'Modality', 'OrganDose', 'OrganExposed', 'PartialView', 'PatientAge', 'PatientBirthDate', 'PatientID', 'PatientName', 'PatientOrientation', 'PatientSex', 'PerformedProcedureStepDescription', 'PerformedProcedureStepID', 'PerformedProcedureStepStartDate', 'PerformedProcedureStepStartTime', 'PhotometricInterpretation', 'PixelData', 'PixelIntensityRelationship', 'PixelIntensityRelationshipSign', 'PixelRepresentation', 'PositionerPrimaryAngle', 'PositionerSecondaryAngle', 'PositionerType', 'PresentationIntentType', 'PresentationLUTShape', 'ProtocolName', 'QualityControlImage', 'RectificationType', 'ReferencedPerformedProcedureStepSequence', 'ReferringPhysicianName', 'RelativeXRayExposure', 'RequestAttributesSequence', 'RequestedProcedureDescription', 'RequestingPhysician', 'RescaleIntercept', 'RescaleSlope', 'RescaleType', 'Rows', 'SOPClassUID', 'SOPInstanceUID', 'SamplesPerPixel', 'SeriesDate', 'SeriesDescription', 'SeriesInstanceUID', 'SeriesNumber', 'SeriesTime', 'ShutterLeftVerticalEdge', 'ShutterLowerHorizontalEdge', 'ShutterRightVerticalEdge', 'ShutterShape', 'ShutterUpperHorizontalEdge', 'SoftwareVersions', 'SpecificCharacterSet', 'StationName', 'StudyDate', 'StudyDescription', 'StudyID', 'StudyInstanceUID', 'StudyTime', 'TableAngle', 'TableType', 'TimeOfLastDetectorCalibration', 'TomoLayerHeight', 'ViewCodeSequence', 'ViewPosition', 'WindowCenterWidthExplanation', 'XRayTubeCurrent', 'XRayTubeCurrentInuA']
+                    for at in attribut:
+                        if hasattr(ds, at) == False:
+                            setattr(ds, at, None)
+                    dataDicom = {
+                                'Implementation Version Name' : [ds.file_meta.ImplementationVersionName], 
+                                'Image Type' : [ImageType], 
                                 'Acquisition Date' : [ds.AcquisitionDate], 
-                                'kVp' : [ds.KVP],
-                                'Exposure' : [ds.Exposure],  
+                                'Acquisition Time' : [ds.AcquisitionTime], 
+                                'Modality' : [ds.Modality], 
+                                'Presentation Intent Type' : [ds.PresentationIntentType], 
+                                'Manufacturer' : [ds.Manufacturer], 
+                                'Institution Name' : [ds.InstitutionName], 
+                                'Manufacturer Model Name' : [ds.ManufacturerModelName], 
+                                'Patient Name' : [ds.PatientName], 
+                                'kVp' : [ds.KVP], 
+                                'Device Serial Number' : [ds.DeviceSerialNumber], 
+                                'Software Versions(s)' : [SoftwareVersions], 
+                                'Distance Source to Detector' : [ds.DistanceSourceToDetector], 
+                                'Distance Source to Patient' : [ds.DistanceSourceToPatient], 
+                                'Field of View Shape' : [ds.FieldOfViewShape], 
+                                'Field of View Dimensions(s)' : [str(ds.FieldOfViewDimensions)], 
+                                'Exposure Time' : [ds.ExposureTime], 
+                                'X-ray Tube Current' : [ds.XRayTubeCurrent], 
+                                'Exposure' : [ds.Exposure], 
+                                'Exposure in uAs' : [ds.ExposureInuAs], 
+                                'Rectification Type' : [ds.RectificationType], 
+                                'Imager Pixel Spacing' : [str(ds.ImagerPixelSpacing)], 
                                 'Grid' : [ds.Grid], 
+                                'Focal Spot(s)' : [ds.FocalSpots], 
                                 'Anode Target Material' : [ds.AnodeTargetMaterial], 
+                                'Body Part Thickness' : [ds.BodyPartThickness], 
+                                'Compression Force' : [ds.CompressionForce], 
+                                'Detector Type' : [ds.DetectorType], 
+                                'Detector Configuration' : [ds.DetectorConfiguration], 
+                                'Detector Description' : [ds.DetectorDescription], 
+                                'Detector Mode' : [ds.DetectorMode], 
                                 'Detector ID' : [ds.DetectorID], 
-                                'Date of Last Detector Calibration' : [ds.DateOfLastDetectorCalibration],  
-                                'Filter Material LT' : [ds.FilterMaterial]
+                                'Date of Last Detector Calibration' : [ds.DateOfLastDetectorCalibration], 
+                                'Time of Last Detector Calibration' : [ds.TimeOfLastDetectorCalibration], 
+                                'Exposures on Detector Since Last Calibration' : [ds.ExposuresOnDetectorSinceLastCalibration], 
+                                'Exposures on Detector Since Manufactured' : [ds.ExposuresOnDetectorSinceManufactured], 
+                                'Detector Time Since Last Exposure' : [ds.DetectorTimeSinceLastExposure], 
+                                'Detector Active Time' : [ds.DetectorActiveTime], 
+                                'Detector Activation Offset From Exposure' : [ds.DetectorActivationOffsetFromExposure], 
+                                'Detector Binning' : [str(ds.DetectorBinning)], 
+                                'Detector Element Physical Size' : [str(ds.DetectorElementPhysicalSize)], 
+                                'Detector Element Spacing' : [str(ds.DetectorElementSpacing)], 
+                                'Detector Active Shape' : [ds.DetectorActiveShape], 
+                                'Detector Active Dimension(s)' : [str(ds.DetectorActiveDimensions)], 
+                                'Filter Material LT' : [ds.FilterMaterial], 
+                                'Filter Thickness Minimum' : [ds.FilterThicknessMinimum], 
+                                'Filter Thickness Maximum' : [ds.FilterThicknessMaximum], 
+                                'Exposure Control Mode' : [ds.ExposureControlMode], 
+                                'Exposure Control Mode Description' : [ds.ExposureControlModeDescription], 
+                                'Photometric Interpretation' : [ds.PhotometricInterpretation], 
+                                'Rows' : [ds.Rows], 
+                                'Columns' : [ds.Columns], 
+                                'Bits Allocated' : [ds.BitsAllocated], 
+                                'Bits Stored' : [ds.BitsStored], 
+                                'High Bit' : [ds.HighBit], 
+                                'Pixel Intensity Relationship' : [ds.PixelIntensityRelationship], 
+                                'Distance Source to Entrance' : [ds.DistanceSourceToEntrance], 
+                                'Organ Dose' : [ds.OrganDose], 
+                                'Entrance Dose in mGy' : [ds.EntranceDoseInmGy]
                                 }
                     df = pd.DataFrame(dataDicom)
                     dfAll = dfAll.append(df, ignore_index=True)
