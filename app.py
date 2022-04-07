@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QFileDialog,QMessageBox
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(239, 80)
+        MainWindow.resize(260, 80)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("dcm-icon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -19,7 +19,7 @@ class Ui_MainWindow(object):
         self.button1.setObjectName("button1")
         self.button1.clicked.connect(self.screen1)
         self.button2 = QtWidgets.QPushButton(self.centralwidget)
-        self.button2.setGeometry(QtCore.QRect(120, 10, 111, 31))
+        self.button2.setGeometry(QtCore.QRect(120, 10, 121, 31))
         self.button2.setObjectName("button2")
         self.button2.clicked.connect(self.screen2)
         self.label = QtWidgets.QLabel(self.centralwidget)
